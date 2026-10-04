@@ -1,6 +1,6 @@
 substitutions:
   device_name: "jk-bms"
-  protocol_version: "JK02_24S" # Выберите JK02_32S для новых BMS (HW 11+)
+  protocol_version: "JK02_32S" # Идеально для новых Smart BMS BD4A24S10P
 
 esphome:
   name: "${device_name}"
@@ -18,7 +18,7 @@ wifi:
   ssid: "Brila"
   password: "67620000"
 
-api: # Прямая интеграция с Home Assistant
+api:
 
 ota:
   - platform: esphome
@@ -30,7 +30,7 @@ logger:
   level: DEBUG
 
 ble_client:
-  - mac_address: C8:47:80:4B:3D:78 # Bluetooth MAC-адрес вашей BMS
+  - mac_address: C8:47:80:4B:3D:78
     id: jk_bms_ble_client
 
 jk_bms_ble:
@@ -58,13 +58,7 @@ sensor:
       name: "${device_name} Current"
     power:
       name: "${device_name} Power"
-    charging_power:
-      name: "${device_name} Charging Power"
-    discharging_power:
-      name: "${device_name} Discharging Power"
     capacity_remaining:
       name: "${device_name} Capacity Remaining"
-    capacity_remaining_derived:
-      name: "${device_name} Capacity Remaining (Derived)"
     soc:
       name: "${device_name} State of Charge"
