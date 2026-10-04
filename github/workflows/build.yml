@@ -1,4 +1,4 @@
-Name: Compile Firmware
+Name: bms
 
 on:
   workflow_dispatch:
