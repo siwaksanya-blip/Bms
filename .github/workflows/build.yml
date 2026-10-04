@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build ESPHome Firmware
-        uses: esphome/build-action@main
+        uses: esphome/build-action@v3.2.0
         with:
           yaml-file: esp32-ble-example.yaml
           version: 2024.11.0
