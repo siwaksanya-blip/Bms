@@ -1,0 +1,70 @@
+substitutions:
+  device_name: "jk-bms"
+  protocol_version: "JK02_24S" # Выберите JK02_32S для новых BMS (HW 11+)
+
+esphome:
+  name: "${device_name}"
+  friendly_name: "JK-BMS Monitoring"
+
+esp32:
+  board: wemos_d1_mini32
+  framework:
+    type: esp-idf
+
+external_components:
+  - source: github://syssi/esphome-jk-bms@main
+
+wifi:
+  ssid: "Brila"
+  password: "67620000"
+
+api: # Прямая интеграция с Home Assistant
+
+ota:
+  - platform: esphome
+    on_begin:
+      then:
+        - switch.turn_off: ble_client_switch0
+
+logger:
+  level: DEBUG
+
+ble_client:
+  - mac_address: C8:47:80:4B:3D:78 # Bluetooth MAC-адрес вашей BMS
+    id: jk_bms_ble_client
+
+jk_bms_ble:
+  - ble_client_id: jk_bms_ble_client
+    id: jk_bms0
+    protocol_version: ${protocol_version}
+
+switch:
+  - platform: jk_bms_ble
+    jk_bms_ble_id: jk_bms0
+    id: ble_client_switch0
+    charging:
+      name: "${device_name} Charging"
+    discharging:
+      name: "${device_name} Discharging"
+    balancer:
+      name: "${device_name} Balancer"
+
+sensor:
+  - platform: jk_bms_ble
+    jk_bms_ble_id: jk_bms0
+    total_voltage:
+      name: "${device_name} Total Voltage"
+    current:
+      name: "${device_name} Current"
+    power:
+      name: "${device_name} Power"
+    charging_power:
+      name: "${device_name} Charging Power"
+    discharging_power:
+      name: "${device_name} Discharging Power"
+    capacity_remaining:
+      name: "${device_name} Capacity Remaining"
+    capacity_remaining_derived:
+      name: "${device_name} Capacity Remaining (Derived)"
+    soc:
+      name: "${device_name} State of Charge"
