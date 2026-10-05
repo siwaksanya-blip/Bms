@@ -1,0 +1,67 @@
+substitutions:
+  device_name: "jk-bms"
+  protocol_version: "JK02_32S" # Идеально для новых Smart BMS BD4A24S10P
+
+esphome:
+  name: "${device_name}"
+  friendly_name: "JK-BMS Monitoring"
+
+esp32:
+  board: wemos_d1_mini32
+  framework:
+    type: esp-idf
+    sdkconfig_options:
+      CONFIG_BT_ALLOCATION_FROM_SPIRAM_FIRST: "y"
+      CONFIG_BT_BLE_DYNAMIC_ENV_MEMORY: "y"
+
+external_components:
+  - source: github://syssi/esphome-jk-bms@main
+
+wifi:
+  ssid: "Brila"
+  password: "67620000"
+
+api:
+
+ota:
+  - platform: esphome
+    on_begin:
+      then:
+        - switch.turn_off: ble_client_switch0
+
+logger:
+  level: DEBUG
+
+ble_client:
+  - mac_address: C8:47:80:4B:3D:78
+    id: jk_bms_ble_client
+
+jk_bms_ble:
+  - ble_client_id: jk_bms_ble_client
+    id: jk_bms0
+    protocol_version: ${protocol_version}
+
+switch:
+  - platform: jk_bms_ble
+    jk_bms_ble_id: jk_bms0
+    id: ble_client_switch0
+    charging:
+      name: "${device_name} Charging"
+    discharging:
+      name: "${device_name} Discharging"
+    balancer:
+      name: "${device_name} Balancer"
+
+sensor:
+  - platform: jk_bms_ble
+    jk_bms_ble_id: jk_bms0
+    total_voltage:
+      name: "${device_name} Total Voltage"
+    current:
+      name: "${device_name} Current"
+    power:
+      name: "${device_name} Power"
+    capacity_remaining:
+      name: "${device_name} Capacity Remaining"
+    state_of_charge:
+      name: "jk-bms State of Charge"
