@@ -10,7 +10,9 @@ esp32:
   board: wemos_d1_mini32
   framework:
     type: esp-idf
-
+    sdkconfig_options:
+      CONFIG_BT_ALLOCATION_FROM_SPIRAM_FIRST: "y"
+      CONFIG_BT_BLE_DYNAMIC_ENV_MEMORY: "y"
 external_components:
   - source: github://syssi/esphome-jk-bms@main
 
