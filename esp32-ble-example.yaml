@@ -13,6 +13,7 @@ esp32:
     sdkconfig_options:
       CONFIG_BT_ALLOCATION_FROM_SPIRAM_FIRST: "y"
       CONFIG_BT_BLE_DYNAMIC_ENV_MEMORY: "y"
+
 external_components:
   - source: github://syssi/esphome-jk-bms@main
 
@@ -62,5 +63,5 @@ sensor:
       name: "${device_name} Power"
     capacity_remaining:
       name: "${device_name} Capacity Remaining"
-    soc:
-      name: "${device_name} State of Charge"
+    state_of_charge:
+      name: "jk-bms State of Charge"
