@@ -1,7 +1,7 @@
-name: bms
+name: Сборка Jikong Smart BMS
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Позволяет запускать сборку вручную кнопкой
 
 jobs:
   build:
@@ -10,11 +10,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build ESPHome Firmware
-        uses: esphome/build-action@main
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          yaml-file: esp32-ble-example.yaml
-          version: latest
+          python-version: '3.11'
+
+      - name: Install ESPHome
+        run: |
+          pip install esphome==2024.11.0
+
+      - name: Build ESPHome Firmware
+        run: |
+          esphome compile smart-bms.yaml
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
